@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Mon Jul 04 15:42:12 CST 2016
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=DemoMyBatis_fat.jar
+manifest.mergeall=true
+manifest.mainclass=com.yihaomen.test.Login
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|image-scal.jar>;<jar|JSpaces-1[1].1.jar>;<jar|jstl.jar>;<jar|ojdbc6.jar>;<jar|sqljdbc4.jar>;<jar|standard.jar>
+includes=
