@@ -78,7 +78,7 @@ public class SwipeCardLogin extends JFrame {
 	}
 
 	public SwipeCardLogin() {
-		super("管理人員登陸-V20170823");
+		super("管理人員登陸-V20170901");
 		setBounds(212, 159, 600, 450);
 		setResizable(false);
 		Container c = getContentPane();
@@ -94,8 +94,9 @@ public class SwipeCardLogin extends JFrame {
 		but1 = new MyJButton("確認 ", 2);
 
 		comboBox1 = new JComboBox(getWorkshopNo());
-		comboBox1.setEditable(true);
+		comboBox1.setEditable(false);//設置comboBox1為不可編輯，此時jtf1不生效
 		comboBox1.setFont(new Font("微软雅黑", Font.PLAIN, 18));
+				
 		jtf1 = (JTextField) comboBox1.getEditor().getEditorComponent();
 
 		label1.setBounds(150, 50, 300, 40);
@@ -129,8 +130,7 @@ public class SwipeCardLogin extends JFrame {
 				// TODO Auto-generated method stub
 
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					String key = jtf1.getText();
-					System.out.println("key: " + key);
+					String key = jtf1.getText();					
 				}
 			}
 		});
@@ -173,41 +173,25 @@ public class SwipeCardLogin extends JFrame {
 		InitGlobalFont(new Font("微软雅黑", Font.BOLD, 18));
 		SwipeCardLogin d = new SwipeCardLogin();
 	//	SwipeCardLogin.create();
-		SwipeCardLogin.setOSTime();
+	//	SwipeCardLogin.setOSTime();
 
 	}
 
 	public static void create() {
-
 		Process proc = null;
-
-		String cmd = "cmd /c runAs /user:administrator net start w32time & w32tm /config /update /manualpeerlist:192.168.78.8 & w32tm /resync";
+		 String[] cmd = {"cmd", "/k","net runas /user:administrator start w32time & w32tm /config /update /manualpeerlist:192.168.78.8 & w32tm /resync"};
 		try {
 		proc = Runtime.getRuntime().exec(cmd);
-
-
 		InputStream inputStream = proc.getInputStream();
-
 		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-
 		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
 		String line;
-
-		
-
-			while ((line = bufferedReader.readLine()) != null) {
-
-				System.out.println(line);
-
+		while ((line = bufferedReader.readLine()) != null) {
+			System.out.println(line);
 			}
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		}
-
 	}
 
 	// 读取进程的输出信息并打印到控制台就不会发生阻塞，程序能正常的结束。
@@ -259,7 +243,7 @@ public class SwipeCardLogin extends JFrame {
 			String currDate = dateFormat.format(date);
 
 			// 设置Windows系统日期
-			Process exec = Runtime.getRuntime().exec("cmd /c runAs /user:administrator date " + currDate);
+			Process exec = Runtime.getRuntime().exec("cmd /k date " + currDate);
 			printMessage(exec.getInputStream());
 			printMessage(exec.getErrorStream());
 			if (exec.waitFor() == 0) {
@@ -274,7 +258,7 @@ public class SwipeCardLogin extends JFrame {
 			String currTime = timeFormat.format(date);
 
 			// 设置Windows系统时间
-			exec = Runtime.getRuntime().exec("cmd /c runAs /user:administrator time " + currTime);
+			exec = Runtime.getRuntime().exec("cmd /k time " + currTime);
 			printMessage(exec.getInputStream());
 			printMessage(exec.getErrorStream());
 			if (exec.waitFor() == 0) {
@@ -356,6 +340,7 @@ class TextFrame_jButton1_actionAdapter implements ActionListener {
 	 * @see
 	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		char[] pass = adaptee.text1.getPassword();
@@ -374,9 +359,10 @@ class TextFrame_jButton1_actionAdapter implements ActionListener {
 			if (isHave(a, CardID)) {// 调用自己定义的函数isHave，如果包含则返回true,否则返回false
 				System.out.println("成功登陸！");
 				adaptee.dispose();
-				String WorkshopNo = SwipeCardLogin.jtf1.getText();
-				SwipeCard swipe = new SwipeCard(WorkshopNo);
-
+				//String WorkshopNo = SwipeCardLogin.jtf1.getText();
+				String selectWorkShopNo = adaptee.comboBox1.getSelectedItem().toString();
+				SwipeCard swipe = new SwipeCard(selectWorkShopNo);
+				System.out.println("WorkShopNo: " + selectWorkShopNo);
 			} else {
 				JOptionPane.showMessageDialog(adaptee, "此卡無管理員權限");
 				System.out.println("此管理员不存在");// 打印结果
