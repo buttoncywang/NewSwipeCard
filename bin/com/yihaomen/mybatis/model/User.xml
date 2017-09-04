@@ -147,7 +147,7 @@
 	   FROM `testSwipeCardTime`
 	   WHERE CardID = #{CardID}
        and Date_format(swipecardtime, '%Y-%m-%d')=curdate() 
-       AND swipecardtime > date_sub(now(),interval 10 minute)
+       AND swipecardtime > date_sub(now(),interval '9,60' MINUTE_SECOND)
 	</select>
 	
 	<select id="isOutWorkSwipeDuplicate" parameterType="int"
@@ -156,7 +156,7 @@
 	   FROM `testSwipeCardTime`
 	   WHERE CardID = #{CardID}
        and Date_format(swipecardtime2, '%Y-%m-%d')=curdate() 
-       AND swipecardtime2 > date_sub(now(),interval 10 minute)
+       AND swipecardtime2 > date_sub(now(),interval '9,60' MINUTE_SECOND)
 	</select>
 	
 	<select id="selectChangeLineByCardID" parameterType="int"
@@ -345,7 +345,7 @@
 	
     <select id="getCurShiftByEmpId" parameterType="int"
 		resultType="User">
-		select a.id,a.emp_date,a.class_no,b.class_desc,
+		select a.id,a.emp_date,a.class_no,b.class_desc,b.shift,
 		<![CDATA[ STR_TO_DATE( CONCAT_WS(' ',curdate(),b.class_start),'%Y-%m-%d %H%i') as class_start,
 		STR_TO_DATE( CONCAT_WS(' ',curdate(),b.class_end),'%Y-%m-%d %H%i') as class_end ]]>
 		from emp_class a,classno b 
@@ -355,7 +355,10 @@
 		
 	<select id="getYesdayShiftByEmpId" parameterType="int"
 		resultType="User">
-		select a.id,a.emp_date,a.class_no,b.class_desc from emp_class a,classno b 
+		select a.id,a.emp_date,a.class_no,b.class_desc,b.shift,
+		<![CDATA[ STR_TO_DATE( CONCAT_WS(' ',curdate(),b.class_start),'%Y-%m-%d %H%i') as class_start,
+		STR_TO_DATE( CONCAT_WS(' ',curdate(),b.class_end),'%Y-%m-%d %H%i') as class_end ]]>
+		from emp_class a,classno b 
 		where a.class_no=b.class_no and id=#{id} 
 		 and <![CDATA[ a.emp_date=date_sub(curdate(),interval 1 day) ]]>
 	</select>
