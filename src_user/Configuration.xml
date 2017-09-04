@@ -14,7 +14,7 @@
 				<property name="driver" value="com.mysql.jdbc.Driver" />
 				<property name="url" value="jdbc:mysql://localhost/swipecard" /> 
 				<property name="username" value="root" />
-				<property name="password" value="foxlink" />				
+				<property name="password" value="root" />				
 				<property name="poolMaximumActiveConnections" value="5" />
                 <property name="poolMaximumIdleConnections" value="0" />				
 			<!-- 	<property name="poolPingEnabled" value="true"/>
