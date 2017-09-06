@@ -638,19 +638,23 @@ public class SwipeCard extends JFrame {
 																+ eif.getName() + "\n" + "今日上下班卡已刷，此次刷卡無效！\n\n");
 													}
 												} else if (yesterdaygoWorkCardCount.getRowsd() == 0) {													
-
+													//有可能為昨日上班卡有刷，今日下班卡沒刷 or 昨日上班卡沒刷，今日下班卡也沒刷
 													User goWorkNCardCount = (User) session
-															.selectOne("selectGoWorkNByCardID", userNSwipe);
+															.selectOne("selectGoWorkNByCardID", userNSwipe); //取得該員工昨日到今日有上刷的筆數(有上刷)
 													if (goWorkNCardCount.getRowse() == 0) {
+														//昨日無上刷
 														User isOutWoakSwipeDuplicate = (User) session
-																.selectOne("isOutWorkSwipeDuplicate", CardID);
+																.selectOne("isOutWorkSwipeDuplicate", CardID); //取得該員工從10分鐘前至現在有無下刷記錄
 														if (isOutWoakSwipeDuplicate.getOutWorkCount() > 0) {
+															//10分鐘前至現在有下刷記錄，進行重複刷卡處理
 															outWorkSwipeDuplicate(session, eif, CardID, yesterdayShift);
 														} else {
+															//10分鐘前至現在無下刷記錄
 															User outWorkNCardCount = (User) session
-																	.selectOne("selectOutWorkByCardID", userNSwipe);
+																	.selectOne("selectOutWorkByCardID", userNSwipe); //從今天至明天該員工的刷卡記錄（無上刷，有下刷）
 
 															if (outWorkNCardCount.getRowsg() == 0) {
+																//無上刷也無下刷
 																jtextT1_1.setBackground(Color.WHITE);
 																jtextT1_1.setText("下班刷卡\n" + "ID: " + eif.getId()
 																		+ "\nName: " + eif.getName() + "\n刷卡時間： "
@@ -658,6 +662,7 @@ public class SwipeCard extends JFrame {
 																		+ "員工下班刷卡成功！\n------------\n");
 																session.insert("insertOutWorkSwipeTime", userNSwipe);
 															} else {
+																//無上刷有下刷
 																jtextT1_1.setBackground(Color.WHITE);
 																jtextT1_1.append(
 																		"ID: " + eif.getId() + " Name: " + eif.getName()
@@ -665,6 +670,7 @@ public class SwipeCard extends JFrame {
 															}
 														}
 													} else {
+														//昨日有上刷（）
 														jtextT1_1.setBackground(Color.WHITE);
 														jtextT1_1.setText("下班刷卡\n" + "ID: " + eif.getId() + "\nName: "
 																+ eif.getName() + "\n刷卡時間： " + swipeCardTime + "\n"
@@ -679,11 +685,12 @@ public class SwipeCard extends JFrame {
 												swipeCardRecord(session, eif, CardID);							
 											}
 										} else {
-											User goWorkNCardCount = (User) session.selectOne("selectGoWorkNByCardID", userNSwipe);
+											//日班
+											User goWorkNCardCount = (User) session.selectOne("selectGoWorkNByCardID", userNSwipe); //前一天有上刷記錄
 											if (goWorkNCardCount.getRowse() > 0) {  //昨日夜班已存在上刷
-												User yesterdaygoWorkCardCount = (User) session.selectOne("selectCountNByCardID", userNSwipe);
+												User yesterdaygoWorkCardCount = (User) session.selectOne("selectCountNByCardID", userNSwipe);//前一天有下刷記錄
 												if (yesterdaygoWorkCardCount.getRowsd() == 0) {//夜班下刷刷卡記錄不存在	
-																							
+													//前一天無下刷記錄										
 													Timestamp yesClassStart = empYesShift.getClass_start();
 													Timestamp yesClassEnd = empYesShift.getClass_end();
 													Timestamp goWorkSwipeTime = new Timestamp(new Date().getTime());

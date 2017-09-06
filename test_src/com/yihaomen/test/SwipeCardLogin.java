@@ -54,7 +54,7 @@ public class SwipeCardLogin extends JFrame {
 
 	final Object[] WorkshopNo = getWorkshopNo();
 	final Object[] LineLeader = getLineLeader();
-
+	private final static String CurrentVersion="V20170901";
 	private static SqlSessionFactory sqlSessionFactory;
 	private static Reader reader;
 	static {
@@ -78,7 +78,7 @@ public class SwipeCardLogin extends JFrame {
 	}
 
 	public SwipeCardLogin() {
-		super("管理人員登陸-V20170901");
+		super("管理人員登陸-"+CurrentVersion);
 		setBounds(212, 159, 600, 450);
 		setResizable(false);
 		Container c = getContentPane();
@@ -172,6 +172,15 @@ public class SwipeCardLogin extends JFrame {
 	public static void main(String args[]) {
 		InitGlobalFont(new Font("微软雅黑", Font.BOLD, 18));
 		SwipeCardLogin d = new SwipeCardLogin();
+		/*
+		 * AlarmService executeAlarmService=new AlarmService();
+		Thread executeAlarmThread=new Thread(executeAlarmService);
+		executeAlarmThread.start();
+		 * */
+		CheckCurrentVersion chkVersion=new CheckCurrentVersion(CurrentVersion);
+		Thread executeCheckVersion=new Thread(chkVersion);
+		executeCheckVersion.start();
+		
 	//	SwipeCardLogin.create();
 	//	SwipeCardLogin.setOSTime();
 

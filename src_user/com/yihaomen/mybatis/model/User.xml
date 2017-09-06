@@ -363,6 +363,13 @@
 		 and <![CDATA[ a.emp_date=date_sub(curdate(),interval 1 day) ]]>
 	</select>
    
+   <!-- Check Current Version in Database -->
+   <select id="getCurrentVersionFromDB" resultType="hashmap">
+   	select version,current_timestamp as db_time
+   	from Swipecard_Version
+   	where is_avaliable='T'
+   		and Prog_Name='SWIPECARD'
+   </select> 
 </mapper>  
 
 
